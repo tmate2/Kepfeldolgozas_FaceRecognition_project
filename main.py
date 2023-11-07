@@ -36,9 +36,13 @@ def face_detect(frame, known_faces_enc, names):
     # TODO: Hibajavitás
     # Ha két arc közel van egymáshoz vagy összeérnek a koordinátái, "IndexError"-t dob
     # a 'name = names[known_faces_name[index]' sorba és leáll a program (exit code 1)
+    handle_index_error(known_faces_index, known_faces_name, faces, frame,
+                       names)  # az alatti resz kod majd ebben a metodusban lesz
 
-    handle_index_error(known_faces_index, known_faces_name, faces)  # az alatti resz kod majd ebben a metodusban lesz
+    return frame
 
+
+def handle_index_error(known_faces_index: list, known_faces_name: list, faces: list, frame, names):
     # arc körberajzolása, ismeretlen arc pirossal,
     # ismert arcokat zölddel, alattuk a hozzá tartozó névvel
     for index, (top, right, bottom, left) in enumerate(faces):
@@ -59,12 +63,6 @@ def face_detect(frame, known_faces_enc, names):
             cv2.putText(frame, name, (left + 6, bottom + 21), cv2.FONT_HERSHEY_TRIPLEX, font_scale, (0, 0, 0), 1)
         else:
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 4)
-
-    return frame
-
-
-def handle_index_error(known_faces_index: list, knows_faces_name: list, faces: list):
-    pass
 
 
 def main():
