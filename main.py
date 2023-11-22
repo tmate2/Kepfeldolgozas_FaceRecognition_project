@@ -5,7 +5,7 @@ import face_recognition as fr  # https://github.com/ageitgey/face_recognition
 
 
 # Kamera: 0 laptop, 1 webcam
-KAMERA = 1
+KAMERA = 0
 
 
 def face_detect(frame, known_faces_enc, names):
@@ -78,17 +78,22 @@ def main():
     face3 = fr.load_image_file("known_faces/JoeBiden.jpg")
     face3_enc = fr.face_encodings(face3)[0]
 
+    face4 = fr.load_image_file("known_faces/AronMarton.jpg")
+    face4_enc = fr.face_encodings(face4)[0]
+
     known_faces_enc = [
         face1_enc,
         face2_enc,
-        face3_enc
+        face3_enc,
+        face4_enc
     ]
 
     # az arcokhoz tartozó nevek eltárolása
     names = [
         "Mate Thold",
         "Terry Davis",
-        "Joe Biden"
+        "Joe Biden",
+        "Aron Marton"
     ]
 
     # a kamera képének a megjelenítéséhez egy végtelenített függvényt használunk
