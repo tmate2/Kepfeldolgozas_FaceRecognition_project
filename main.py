@@ -1,5 +1,6 @@
 import cv2
 import face_recognition as fr  # https://github.com/ageitgey/face_recognition
+import numpy as np
 
 # hozzáadott modulok "python-opencv", "face-recognition", "dlib"
 
@@ -10,7 +11,7 @@ KAMERA = 1
 
 def face_detect(frame, known_faces_enc, names):
     # arcok helyének elmentése az aktuális képkocáról
-    faces = fr.face_locations(frame)  # várható eredmény: [(284, 324, 469, 139)]
+    faces = fr.face_locations(frame)
 
     # ha nem talál arcot, akkor a frame-et visszaadjuk
     if faces.__str__() == "[]":
@@ -27,15 +28,17 @@ def face_detect(frame, known_faces_enc, names):
     # talált és ismert arcok összehasonlítása, egyezés esetén pedig az indexek mentése
     for i, face in enumerate(faces_enc):
         for j, kf in enumerate(known_faces_enc):
-            kff = [kf]
+            kff = np.asarray([kf])  # kf átalakítás np.ndarray típusra az összehasonlításhoz
             result = fr.compare_faces(kff, face)
             if True in result:
                 known_faces_index.append(i)
                 known_faces_name.append(j)
+    known_faces_name.append(-1)     # hiba megkerülése, hogy ne crasheljen a program
+    # hátránya: néha eltűnik a név az ismert arc alol
 
     # TODO: Hibajavitás
     # Ha két arc közel van egymáshoz vagy összeérnek a koordinátái, "IndexError"-t dob
-    # a 'name = names[known_faces_name[index]' sorba és leáll a program (exit code 1)
+    # a 'name = names[known_faces_name[index]]' sorba és leáll a program (exit code 1)
     handle_index_error(known_faces_index, known_faces_name, faces, frame,
                        names)  # az alatti resz kod majd ebben a metodusban lesz
 
@@ -88,7 +91,8 @@ def main():
     names = [
         "Mate Thold",
         "Terry Davis",
-        "Joe Biden"
+        "Joe Biden",
+        ""  # placeholder
     ]
 
     # a kamera képének a megjelenítéséhez egy végtelenített függvényt használunk
