@@ -81,10 +81,14 @@ def main():
     face3 = fr.load_image_file("known_faces/JoeBiden.jpg")
     face3_enc = fr.face_encodings(face3)[0]
 
+    face4 = fr.load_image_file("known_faces/AronMarton.jpg")
+    face4_enc = fr.face_encodings(face4)[0]
+
     known_faces_enc = [
         face1_enc,
         face2_enc,
-        face3_enc
+        face3_enc,
+        face4_enc
     ]
 
     # az arcokhoz tartozó nevek eltárolása
@@ -92,7 +96,7 @@ def main():
         "Mate Thold",
         "Terry Davis",
         "Joe Biden",
-        ""  # placeholder
+        "Aron Marton"
     ]
 
     # a kamera képének a megjelenítéséhez egy végtelenített függvényt használunk
