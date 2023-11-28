@@ -45,7 +45,7 @@ def face_detect(frame, known_faces_enc, names):
     return frame
 
 
-def handle_index_error(known_faces_index: list, known_faces_name: list, faces: list, frame, names):
+def handle_index_error(known_faces_index: list, known_faces_name: list, faces: list, frame, names) -> None:
     # arc körberajzolása, ismeretlen arc pirossal,
     # ismert arcokat zölddel, alattuk a hozzá tartozó névvel
     for index, (top, right, bottom, left) in enumerate(faces):
@@ -68,7 +68,7 @@ def handle_index_error(known_faces_index: list, known_faces_name: list, faces: l
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 4)
 
 
-def main():
+def main() -> None:
     capture = cv2.VideoCapture(KAMERA)
 
     # képek előkészítése az arcok felismeréséhez
