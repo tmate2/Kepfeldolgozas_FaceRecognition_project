@@ -2,11 +2,11 @@ import cv2
 import face_recognition as fr  # https://github.com/ageitgey/face_recognition
 import numpy as np
 
-# hozzáadott modulok "python-opencv", "face-recognition", "dlib"
+# PyCharmban hozzáadott modulok: "python-opencv", "face-recognition", "dlib"
 
 
 # Kamera: 0 laptop, 1 webcam
-KAMERA = 1
+KAMERA = 0
 
 
 def face_detect(frame, known_faces_enc, names):
@@ -33,19 +33,12 @@ def face_detect(frame, known_faces_enc, names):
             if True in result:
                 known_faces_index.append(i)
                 known_faces_name.append(j)
-    known_faces_name.append(-1)     # hiba megkerülése, hogy ne crasheljen a program
+                
+    # ha két ismert arc közel kerül egymáshoz, az indexelési hibát okoz a név kiírásánál ( +1 lesz az index értéke )
+    # erre megoldás, az üres string használata a 'names' tömbben, amit ilyen esetekben használunk ki
     # hátránya: néha eltűnik a név az ismert arc alol
+    known_faces_name.append(-1)
 
-    # TODO: Hibajavitás
-    # Ha két arc közel van egymáshoz vagy összeérnek a koordinátái, "IndexError"-t dob
-    # a 'name = names[known_faces_name[index]]' sorba és leáll a program (exit code 1)
-    handle_index_error(known_faces_index, known_faces_name, faces, frame,
-                       names)  # az alatti resz kod majd ebben a metodusban lesz
-
-    return frame
-
-
-def handle_index_error(known_faces_index: list, known_faces_name: list, faces: list, frame, names) -> None:
     # arc körberajzolása, ismeretlen arc pirossal,
     # ismert arcokat zölddel, alattuk a hozzá tartozó névvel
     for index, (top, right, bottom, left) in enumerate(faces):
@@ -66,6 +59,8 @@ def handle_index_error(known_faces_index: list, known_faces_name: list, faces: l
             cv2.putText(frame, name, (left + 6, bottom + 21), cv2.FONT_HERSHEY_TRIPLEX, font_scale, (0, 0, 0), 1)
         else:
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 4)
+
+    return frame
 
 
 def main() -> None:
@@ -91,12 +86,13 @@ def main() -> None:
         face4_enc
     ]
 
-    # az arcokhoz tartozó nevek eltárolása
+    # az arcokhoz tartozó nevek eltárolása + placeholder
     names = [
         "Mate Thold",
         "Terry Davis",
         "Joe Biden",
-        "Aron Marton"
+        "Aron Marton",
+        ""
     ]
 
     # a kamera képének a megjelenítéséhez egy végtelenített függvényt használunk
